@@ -19,8 +19,6 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = 'django-insecure-)fd34l&bs_kp$j6k*2_rgab7cpo#23ik4zu(l&q(=l=8lqef52'
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -81,19 +79,34 @@ WSGI_APPLICATION = 'socialnetwork.wsgi.application'
 ASGI_APPLICATION = 'socialnetwork.asgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+import environ
+
+# Initialize environment variables
+env = environ.Env()
+
+# Define the path to the .env file
+env_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
+
+# Read the .env file if it exists
+if os.path.exists(env_file):
+    environ.Env.read_env(env_file)
+
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'new_database',  # The new database name
-        'USER': 'wisdom',
-        'PASSWORD': '@Alid_910758',
-        'HOST': 'localhost',  # Or your database host
-        'PORT': '3306',       # Or your database port
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT'),
     }
 }
+
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env('SECRET_KEY')
+
 
 
 
